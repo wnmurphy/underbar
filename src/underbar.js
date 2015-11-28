@@ -95,15 +95,18 @@
   };
 
   // Produce a duplicate-free version of the array.
-  _.uniq = function(array) {
-    //create a uniqued array
-    //loop over the given array
-      //for current element, loop over array
-        //if current index j is i, break and move on
-        //if current element is same as element at i, break and move on
-        //otherwise, push element to uniqued array
-    //return uniqued
-  };
+  _. uniq = function(arr) {
+    var previousElement, uniqued = [];
+    arr.sort();  
+    _.each(arr, function(x){
+      if(x !== previousElement){
+        uniqued.push(x);
+      }
+      previousElement = x;
+    });
+    
+    return uniqued;
+};
 
 
   // Return the results of applying an iterator to each element.
