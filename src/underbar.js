@@ -107,7 +107,6 @@
     return uniqued;
 };
 
-
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
     // map() is a useful primitive iteration function that works a lot
@@ -177,7 +176,6 @@
     }, false);
   };
 
-
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     if(collection === [] || {}){return true;}
@@ -236,6 +234,18 @@
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+    for(var i = 1, key, currentAddObj = arguments[i]; i < arguments.length; i++){
+      for(key in currentAddObj){
+        if(key in obj){
+          break;
+        }else if(obj[currentAddObj[key]] === undefined){
+          obj[key] = currentAddObj[key];
+        }else if(currentAddObj[key] in obj){
+          break;
+        }
+      }
+    }
+    return obj;
   };
 
 
