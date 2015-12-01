@@ -177,24 +177,21 @@
   };
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
-    if(collection === [] || {}){return true;}
-
-    return _.reduce(collection, function(result, item){
-      //if the result of calling iterator(item) is false, result = false
-      result = iterator(item);
-      return result;
-      // if item === undefined...
-      // 
+ // Determine whether all of the elements match a truth test.
+  _.every = function(collection, cb) {
+    if(arguments.length === 1){
+      var allTrue = true;
+      _.each(collection, function(x){
+        allTrue = (x === true);
+      });
+      return Boolean(allTrue);
+    }
+    return _.reduce(collection, function(stillTrue, item){
+      if(!stillTrue){
+        return Boolean(false);
+      }
+      return Boolean(cb(item));
     }, true);
-    
-    // fail for a collection of all falsy results (accumulator propogates false)
-    // fail for a collection of mixed truthy/falsy results
-    // work even if collection has undefined values
-    // return result as true/false.
-    // handle callbacks that manipulate the input
-    // work even if no callback is provided
-
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
@@ -289,6 +286,17 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    // create an array
+    // if arguments/result are already in array, return them
+    // else, save arguments/result to an array, return self (containing array) returning result.
+
+    // return a function which:
+      // contains that array 
+      // checks whether the current call's argument list already exists in the array
+      // returns the stored result from the array 
+
+    //return a function that, when called, will check if it's already computed 
+    // the result for a given argument and return it instead.
   };
 
   // Delays a function for the given number of milliseconds, and then calls
