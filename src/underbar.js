@@ -197,7 +197,22 @@
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
+    var anyTrue = false;
+    if(arguments.length === 1){
+      _.each(collection, function(x){
+        if(Boolean(x) === true){
+          anyTrue = true;
+        }
+      });
+      return Boolean(anyTrue);
+    }
+    _.each(collection, function(x){
+      if(Boolean(iterator(x)) === true){
+        anyTrue = true;
+      }
+      
+    });
+    return Boolean(anyTrue);
   };
 
 
@@ -285,7 +300,19 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-  _.memoize = function(func) {
+    _.memoize = function(func){
+    var storage = [], result = func();    
+    return function(func){
+      if(![func,result] in storage){
+        storage.push([func, result]);
+        return result;
+      }else{
+        var idx = storage.indexOf([func, result]);
+        storage[idx][1];
+      }      
+    };
+  };
+
     // create an array
     // if arguments/result are already in array, return them
     // else, save arguments/result to an array, return self (containing array) returning result.
@@ -297,7 +324,6 @@
 
     //return a function that, when called, will check if it's already computed 
     // the result for a given argument and return it instead.
-  };
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
