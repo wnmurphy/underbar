@@ -325,6 +325,8 @@
     //return a function that, when called, will check if it's already computed 
     // the result for a given argument and return it instead.
 
+
+
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -332,6 +334,14 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = [];
+    for(var i = 2; i < arguments.length; i++){
+      args.push(arguments[i]);
+    }
+    console.log(args);
+    setTimeout(function(){
+      func.apply(null, args);
+    }, wait);
   };
 
 
@@ -345,7 +355,21 @@
   // TIP: This function's test suite will ask that you not modify the original
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
+
   _.shuffle = function(array) {
+    // contain all of the same elements as the original
+    var len = array.length, 
+        shuffled = [],
+        randIndex;
+    while(shuffled.length < len+1){
+      for(var i = 0; i < array.length; i++){
+        randIndex = ((Math.floor(Math.random() * len)+1));
+        if(array[randIndex] !== array[i]){
+         shuffled.push(array[i]); 
+        }
+      }  
+    }    
+    return shuffled;
   };
 
 
