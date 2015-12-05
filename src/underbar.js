@@ -300,33 +300,20 @@
   // _.memoize should return a function that, when called, will check if it has
   // already computed the result for the given argument and return that value
   // instead if possible.
-    _.memoize = function(func){
-    var storage = [], result = func();    
-    return function(func){
-      if(![func,result] in storage){
-        storage.push([func, result]);
-        return result;
+
+  _.memoize = function(func){
+    var memoized = {};
+    return function memoize(){
+      var args = Array.prototype.slice.call(arguments);
+      if(memoized[args]){
+        return memoized[args];
       }else{
-        var idx = storage.indexOf([func, result]);
-        storage[idx][1];
-      }      
-    };
+        memoized[args] = func.apply(this, args);
+        return memoized[args];
+      }
+    }
   };
-
-    // create an array
-    // if arguments/result are already in array, return them
-    // else, save arguments/result to an array, return self (containing array) returning result.
-
-    // return a function which:
-      // contains that array 
-      // checks whether the current call's argument list already exists in the array
-      // returns the stored result from the array 
-
-    //return a function that, when called, will check if it's already computed 
-    // the result for a given argument and return it instead.
-
-
-
+    
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -357,18 +344,12 @@
   // http://mdn.io/Array.prototype.slice
 
   _.shuffle = function(array) {
-    // contain all of the same elements as the original
-    var len = array.length, 
-        shuffled = [],
-        randIndex;
-    while(shuffled.length < len+1){
-      for(var i = 0; i < array.length; i++){
-        randIndex = ((Math.floor(Math.random() * len)+1));
-        if(array[randIndex] !== array[i]){
-         shuffled.push(array[i]); 
-        }
-      }  
-    }    
+    var shuffled = array.slice();
+    
+    shuffled.sort(function(a, b){
+        return (Math.random() - 0.5);
+    });  
+    
     return shuffled;
   };
 
