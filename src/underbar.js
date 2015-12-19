@@ -407,26 +407,27 @@
   _.zip = function() {
     var zipped = [], len, currentArr=[];
     var args = Array.prototype.slice.call(arguments);
+    var numOfArrays = args.length;
 
     // iterate over arguments to get the greatest length
     var greatestLength = 0;
-    for(var i = 0; i < args.length; i++){
+    for(var i = 0; i < numOfArrays; i++){
       if (args[i].length > greatestLength){
         greatestLength = args[i].length;
       } 
     }
     
     for(var j = 0; j < greatestLength; j++){
-      // stay on the same element for all arrays
-
-      for(var k = 0; k < args.length; k++){
-        // get the element from each and push it to currentArr
+     //clear out the last set of jth elements from currentArr 
+      currentArr = [];
+      // stay on the jth element for all arrays
+      for(var k = 0; k < numOfArrays; k++){
+        // get the jth element from the kth array and push it to currentArr
         currentArr.push(args[k][j]);
       }
-      // push the currentArr to zipped
+    // push the currentArr to zipped
       zipped.push(currentArr);
     }
-
     return zipped;
   };
 
