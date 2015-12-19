@@ -127,7 +127,6 @@
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(collection, key) {
-    //code here
     return _.map(collection, function(item){
       return item[key];
     });
@@ -177,7 +176,6 @@
   };
 
   // Determine whether all of the elements match a truth test.
- // Determine whether all of the elements match a truth test.
   _.every = function(collection, cb) {
     if(arguments.length === 1){
       var allTrue = true;
@@ -313,7 +311,7 @@
       }
     }
   };
-    
+  
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -364,7 +362,20 @@
 
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
+  /*
+  _.invoke(['dog', 'cat'], 'toUpperCase'); //['DOG', 'CAT']
+  */
   _.invoke = function(collection, functionOrKey, args) {
+    var invoked = [];
+    _.each(collection, function(x){
+      if(typeof functionOrKey === 'function'){
+        invoked.push(functionOrKey.apply(x, args));
+      }else{
+        var method = eval('"' + x + '"' + '.' + functionOrKey + '(' + args + ')');
+        invoked.push(method);
+      }
+    });
+    return invoked;
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -372,6 +383,19 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    var sorted = [];
+    if(typeof iterator === 'string'){
+      _.each(collection, function(x){
+        sorted.push(x[iterator]);
+      });
+    }
+    if(typeof iterator === 'function'){
+      sorted = collection;
+      _.each(collection, function(x){
+        sorted.sort(iterator);
+      });
+    }
+    return sorted;
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -379,31 +403,97 @@
   //
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
+
   _.zip = function() {
+    var zipped = [], len, currentArr=[];
+    var args = Array.prototype.slice.call(arguments);
+
+    // iterate over arguments to get the greatest length
+    var greatestLength = 0;
+    for(var i = 0; i < args.length; i++){
+      if (args[i].length > greatestLength){
+        greatestLength = args[i].length;
+      } 
+    }
+    
+    for(var j = 0; j < greatestLength; j++){
+      // stay on the same element for all arrays
+
+      for(var k = 0; k < args.length; k++){
+        // get the element from each and push it to currentArr
+        currentArr.push(args[k][j]);
+      }
+      // push the currentArr to zipped
+      zipped.push(currentArr);
+    }
+
+    return zipped;
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
   // The new array should contain all elements of the multidimensional array.
   //
   // Hint: Use Array.isArray to check if something is an array
-  _.flatten = function(nestedArray, result) {
+  _.flatten = function(nestedArray){
+    var flattened = [];
+    
+    function pusher(arr){
+      if(Array.isArray(arr)){
+        for(var i = 0; i < arr.length; i++){
+          if(Array.isArray(arr[i])){
+            pusher(arr[i]);
+          }else{
+            flattened.push(arr[i]);
+          }
+        }
+      }
+    }
+    pusher(nestedArray);   
+    return flattened;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
-  _.intersection = function() {
-  };
+  _.intersection = function(arr1, arr2) {
+    var results = [];
+    for(var i = 0; i < arr1.length; i++){
+        for(var j = 0; j < arr2.length; j++){
+            if(arr2[j] === arr1[i]){
+                results.push(arr1[i]);
+            }
+        }   
+    }  
+    return results;
+};
 
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
-  _.difference = function(array) {
-  };
-
+  _.difference = function(arr1, arr2, arr3) {
+    var results = [];
+    if(arr3){
+        arr2 = arr2.concat(arr3);
+    }
+    for(var i = 0; i < arr1.length; i++){
+        var presentInBoth = false;
+        for(var j = 0; j < arr2.length; j++){
+            if(arr1[i] === arr2[j]){presentInBoth = true;}
+        }
+        if(presentInBoth === false){
+                results.push(arr1[i]);
+        }
+    }
+    return results;
+};
   // Returns a function, that, when invoked, will only be triggered at most once
   // during a given window of time.  See the Underbar readme for extra details
   // on this function.
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+    // add a triggered flag, set to false
+    // execute the given function
+    // set triggered to true
+    // execute a setTimeout function which sets the flag to true after the wait period
+    // 
   };
 }());
