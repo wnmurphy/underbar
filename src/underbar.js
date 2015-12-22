@@ -385,15 +385,19 @@
   _.sortBy = function(collection, iterator) {
     var sorted = [];
     if(typeof iterator === 'string'){
-      _.each(collection, function(x){
-        sorted.push(x[iterator]);
+      sorted = collection.sort(function(a, b){
+        return a[iterator] > b[iterator];
       });
-    }
-    if(typeof iterator === 'function'){
-      sorted = collection;
-      _.each(collection, function(x){
-        sorted.sort(iterator);
-      });
+    } else {
+      for(var i = 0; i < collection.length; i++){
+        if(Object.prototype.toString.call(collection[i]) === '[object Object]'){
+          sorted = collection.sort(iterator);
+          break;
+        } else if(typeof collection[i] === 'number'){
+          console.log('in number');
+          sorted = collection.sort(function(a,b){return a-b;});
+        }
+      }
     }
     return sorted;
   };
